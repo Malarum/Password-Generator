@@ -12,8 +12,9 @@ parser.add_argument('-l','--lowercase', action='store_true', help='Adds lowercas
 parser.add_argument('-u','--uppercase', action='store_true', help='Adds uppercase letters to your password')
 parser.add_argument('-n','--numbers', action='store_true', help='Adds numbers to your password')
 parser.add_argument('-s','--special', action='store_true', help='Adds special characters to your password')
-parser.add_argument('-a', '--all', action='store_true', help='Use all of the above')
+parser.add_argument('-a', '--all', action='store_true', help='Use all of the above', default=True) # set atleast one of these to default to True
 args=parser.parse_args()
+
 
 
 chars = ''
@@ -22,39 +23,40 @@ if args.all:
 	chars = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
 
 else:
-    if args.lowercase:
-	    chars += string.ascii_lowercase
-    if args.uppercase:
-	    chars += string.ascii_uppercase
-    if args.numbers:
-	    chars += string.digits
-    if args.special:
-	    chars += string.punctuation
+	if args.lowercase:
+		chars += string.ascii_lowercase
+	if args.uppercase:
+		chars += string.ascii_uppercase
+	if args.numbers:
+		chars += string.digits
+	if args.special:
+		chars += string.punctuation
 
 
 def password_calculator():
 	while True:
 		pwdstr = ''
-		try: 
-			password = int(input("Enter the length of the password you would like, up to 50 characters: "))
-			while password > 0 and password  < 50:
+		ui = input("Enter the length of the password you would like, up to 50 characters: ")
+		# check if the input from the user is not a digit using Python's built-in function
+		if not ui.isdigit():
+			print("Please provide a number")
+			continue
 
-				for i in range(password):
-					pwdstr += random.choice(chars)
-				return pwdstr
-			
-				break
-			if password > 50:
-				print("Please select a number between 0-50")
-				continue
-			elif password <= 0: 
-				print("Please select a number between 1 and 50")
-				continue
-			print(pwdstr)
-		except ValueError:
-			print("that is not a number. please try again.")
-		else:
+		password = int(ui)
+		while password > 0 and password  < 50:
+
+			for i in range(password):
+				pwdstr += random.choice(chars)
+			return pwdstr
+		
 			break
+		if password > 50:
+			print("Please select a number between 0-50")
+			continue
+		elif password <= 0: 
+			print("Please select a number between 1 and 50")
+			continue
+		print(pwdstr)
 
 password = password_calculator()
 print(password)
